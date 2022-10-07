@@ -8,23 +8,9 @@ const User = require("../models/User");
 const router = require("express").Router();
 
 router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
-  // if (req.body.password) {
-  //   const hashedPassword = await bcrypt
-  //     .hash(req.body.password, process.env.BCRYPT_SALT_KEY)
-  //     .then((hashedPassword) => {
-  //       req.params.id,
-  //         {
-  //           $set: { password: hashedPassword },
-  //         },
-  //         { new: true };
-  //     })
-  //     .then((user) => {
-  //       res.status(200).json(user);
-  //     })
-  //     .catch((err) => {
-  //       res.status(500).json(err);
-  //     });
-  // }
+  if (req.body.password) {
+    req.body.password = await bcrypt.hash(req.body.password, 10);
+  }
 
   const updateUser = User.findOneAndUpdate(
     req.params.id,
@@ -84,5 +70,33 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
           res.status(500).json(err);
         });
 });
+
+// User Status
+// router.get("/status", verifyTokenAndAdmin, (req, res) => {
+//   const date = new Date();
+//   console.log(date.getFullYear());
+//   const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+//   console.log(lastYear);
+
+//   try {
+//     const data = User.aggregate([
+//       { $match: { createdAt: { $gte: lastYear } } },
+//       {
+//         $project: {
+//           month: { $month: "$createdAt" },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$month",
+//           total: { $sum: 1 },
+//         },
+//       },
+//     ]);
+//     res.status(200).json(data);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 module.exports = router;
