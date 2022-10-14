@@ -98,14 +98,10 @@ const ProductAmountContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const Add = styled.span``;
-
 const ProductAmount = styled.div`
   font-size: 24px;
   margin: 5px;
 `;
-
-const Remove = styled.span``;
 
 const ProductPrice = styled.div`
   font-size: 30px;
