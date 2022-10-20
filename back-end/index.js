@@ -20,6 +20,13 @@ mongoose
     console.log(err);
   });
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Authorization");
+  next();
+});
+
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
@@ -27,6 +34,6 @@ app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/orders", orderRouter);
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("App listening in port 3000");
+app.listen(process.env.PORT || 5000, () => {
+  console.log("App listening in port 5000");
 });

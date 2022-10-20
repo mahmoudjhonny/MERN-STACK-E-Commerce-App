@@ -55,24 +55,39 @@ router.get("/find/:id", (req, res) => {
 
 // GET ALL PRODUCTS
 router.get("/", (req, res) => {
-  const query = req.query.new;
-  const product = query
-    ? Product.find()
-        .sort({ _id: -1 })
-        .limit(5)
-        .then((products) => {
-          res.status(200).json(products);
-        })
-        .catch((err) => {
-          res.status(500).json(err);
-        })
-    : Product.find()
-        .then((products) => {
-          res.status(200).json(products);
-        })
-        .catch((err) => {
-          res.status(500).json(err);
-        });
+  const qNew = req.query.new;
+  const qCategory = req.query.category;
+  if (qNew) {
+    return Product.find()
+      .sort({ createdAt: -1 })
+      .limit(1)
+      .then((product) => {
+        res.status(200).json(product);
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
+  } else if (qCategory) {
+    return Product.find({
+      categories: {
+        $in: [qCategory],
+      },
+    })
+      .then((product) => {
+        res.status(200).json(product);
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
+  } else {
+    products = Product.find()
+      .then((product) => {
+        res.status(200).json(product);
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
+  }
 });
 
 module.exports = router;
